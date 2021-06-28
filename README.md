@@ -12,5 +12,5 @@ Select watermark position for default_watermarks
 
 **Here you go**
 
-## Contacts
+## Support
 `Telegram` @xtichkdydykiddt
