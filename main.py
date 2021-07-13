@@ -2,9 +2,9 @@ import time
 from PIL import Image
 import os
 
-current_path = os.path.dirname(os.path.realpath(__file__))
-default_watermark_dir = current_path + "/default_watermark"
-full_watermark_dir = current_path + "/full_watermark"
+dirname = os.path.dirname(__file__)
+default_watermark_dir = os.path.join(dirname, "default_watermark")
+full_watermark_dir = os.path.join(dirname, "full_watermark")
 
 
 def left_top(base_image_size, watermark_size):
@@ -63,7 +63,9 @@ def paste(base_image, watermark, position, fully=False):
                 base_image.paste(watermark, position, watermark)
     else:
         base_image.paste(watermark, position, watermark)
-    base_image.save(current_path + "/done/wm_" + base_image_name + ".png", "PNG", quality=75)
+    global dirname
+    save_path = os.path.join(dirname, 'done')
+    base_image.save(save_path + '/' + "wm_" + base_image_name + ".png", "PNG", quality=75)
 
 
 positions = {
@@ -81,7 +83,8 @@ print("Place the watermark image in the program folder")
 while True:
     try:
         watermark_name = input("\x1b[1mEnter name of the watermark image\n")
-        f = open(current_path + "/" + watermark_name)
+        watermark_path = os.path.join(dirname, watermark_name)
+        f = open(watermark_path)
         f.close()
         break
     except FileNotFoundError:
@@ -103,13 +106,13 @@ print("Processing...\n")
 for image in os.listdir(default_watermark_dir):
     base_image_name = image.split(".")[0]
     base_image = Image.open(default_watermark_dir + "/" + image)
-    watermark = Image.open(current_path + "/" + watermark_name)
+    watermark = Image.open(watermark_path)
     paste(base_image, watermark, position)
 
 for image in os.listdir(full_watermark_dir):
     base_image_name = image.split(".")[0]
     base_image = Image.open(full_watermark_dir + "/" + image)
-    watermark = Image.open(current_path + "/" + watermark_name)
+    watermark = Image.open(watermark_path)
     paste(base_image, watermark, position, True)
 
 print("Successfully")
